@@ -36,7 +36,7 @@ export default function Home() {
                 Plutus Project-Based Learning 2024
               </h1>
               <div className="mx-auto mt-[5rem] flex w-full flex-row justify-between md:w-3/4">
-                <Link href="https://github.com/orgs/gimbalabs/teams/plutus-project-based-learning-2024/repositories">
+                <Link href="https://github.com/gimbalabs/ppbl2024-front-end">
                   <GitHubLogoIcon width={50} height={50} />
                 </Link>
                 <Link href="https://gimbalabs.com">
