@@ -16,18 +16,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex w-full flex-col items-center justify-center">
-        <Tabs
-          defaultValue="home"
-          className="flex w-full flex-col items-center justify-center md:mt-10"
-        >
-          <TabsList className="mx-auto flex w-full flex-row justify-between md:w-2/3">
-            <TabsTrigger value="home">home</TabsTrigger>
-            <TabsTrigger value="calendar">calendar</TabsTrigger>
-            <TabsTrigger value="course">course</TabsTrigger>
-            <TabsTrigger value="about">about</TabsTrigger>
-          </TabsList>
+       
 
-          <TabsContent value="home">
             <div className="flex min-h-[70vh] flex-col items-center justify-center px-5">
               <p className="text-center text-sm text-indigo-300 md:text-2xl">
                 module 101 goes live 2024-05-02
@@ -53,23 +43,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-          </TabsContent>
-          <TabsContent value="calendar">
-            <div className="flex min-h-[70vh] flex-col items-center justify-center px-5">
-              coming soon
-            </div>
-          </TabsContent>
-          <TabsContent value="course">
-            <div className="flex min-h-[70vh] flex-col items-center justify-center px-5">
-              coming soon
-            </div>
-          </TabsContent>
-          <TabsContent value="about">
-            <div className="flex min-h-[70vh] flex-col items-center justify-center px-5">
-              coming soon
-            </div>
-          </TabsContent>
-        </Tabs>
+         
         <div className="w-2/3">
           <p className="text-left font-mono text-[1.5rem]">
             ppbl2024 $ <span className="animate-pulse">_</span>
