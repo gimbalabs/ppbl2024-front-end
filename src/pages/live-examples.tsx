@@ -1,5 +1,6 @@
 import { CardanoWallet, useAddress, useNetwork } from "@meshsdk/react";
 import MintPPBL2024PreprodToken from "~/components/transactions/MintPPBL2024PreprodToken";
+import PPBLFaucetWithdrawalTx from "~/components/transactions/PPBLFaucetWithdrawlTx";
 import {
   Card,
   CardContent,
@@ -60,12 +61,15 @@ export default function LiveExamplesPage() {
                 <MintPPBL2024PreprodToken />
               </CardContent>
               <CardFooter>
-                Gimbalabs Open Spaces 2024-05-02: What message should we write here?
+                Gimbalabs Open Spaces 2024-05-02: What message should we write
+                here?
               </CardFooter>
             </Card>
             <Card>
-              <CardHeader>PPBL 2024 Faucet Demo</CardHeader>
-              <CardContent></CardContent>
+              <CardHeader>PPBL 2024 Faucet Demo...</CardHeader>
+              <CardContent>
+                <PPBLFaucetWithdrawalTx />
+              </CardContent>
               <CardFooter></CardFooter>
             </Card>
           </>
