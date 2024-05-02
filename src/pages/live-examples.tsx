@@ -56,7 +56,7 @@ export default function LiveExamplesPage() {
           <>
             <Card>
               <CardHeader>Mint a PPBL 2024 Preprod Token</CardHeader>
-              <CardContent>
+              <CardContent className="w-full">
                 <MintPPBL2024PreprodToken />
               </CardContent>
               <CardFooter>

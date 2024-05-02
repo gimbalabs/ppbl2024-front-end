@@ -22,20 +22,22 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { api } from "~/utils/api";
+import { register } from "module";
 
 export default function MintPPBL2024PreprodToken() {
-  const { connected, wallet } = useWallet();
+  const { wallet } = useWallet();
   const address = useAddress();
-  const [asset, setAsset] = useState<Mint | undefined>(undefined);
 
   const [contributorTokenName, setContributorTokenName] = useState<
     string | undefined
   >(undefined);
-  const [successfulTxHash, setSuccessfulTxHash] = useState<string | null>(null);
-  const [userSignedTx, setUserSignedTx] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const forgingScript = api.ppbl2024TokenMintTx.forgingScript.useQuery().data;
+  const [tokenNameExists, setTokenNameExists] = useState<boolean>(false);
+
+  const { data: forgingScript } =
+    api.ppbl2024TokenMintTx.forgingScript.useQuery();
+  const { data: tokenNames } =
+    api.ppbl2024TokenMintTx.listTokenNames.useQuery();
 
   const formSchema = z.object({
     tokenAlias: z.string().min(2, {
@@ -48,27 +50,30 @@ export default function MintPPBL2024PreprodToken() {
     defaultValues: {
       tokenAlias: "",
     },
+    mode: "onChange",
   });
 
-  // Set up the mutation using the trpc hook
   const { mutate } = api.ppbl2024TokenMintTx.signAndSubmitTx.useMutation({
     onSuccess: (data) => {
-      // Handle successful transaction submission
       console.log("Transaction Hash:", data);
-      setSuccessfulTxHash(data);
-      setError("");
+      alert("You successfully minted a PPBL 2024 Token!");
     },
     onError: (error) => {
-      // Handle any errors
       console.error("Error submitting transaction:", error);
-      setError(error.message);
+      alert(error.message);
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const _tn = "ppbl2024-" + values.tokenAlias;
-    setContributorTokenName(_tn);
-    console.log("minting", _tn);
+    if (tokenNames?.includes(values.tokenAlias)) {
+      alert(
+        `The token alias ${values.tokenAlias} is already minted. Please try a different one.`,
+      );
+    } else {
+      const _tn = "ppbl2024-" + values.tokenAlias;
+      setContributorTokenName(_tn);
+      console.log("minting", _tn);
+    }
   }
 
   useEffect(() => {
@@ -113,7 +118,6 @@ export default function MintPPBL2024PreprodToken() {
           assetQuantity: "1",
           metadata: assetMetadata,
           label: "721",
-          // ahh need datum here xD -- todo
           recipient: referenceTokenRecipient,
         };
         const _referenceAsset: Mint = {
@@ -150,8 +154,9 @@ export default function MintPPBL2024PreprodToken() {
   }, [contributorTokenName]);
 
   return (
-    <div>
+    <div className="flex flex-col w-full">
       <h2>Mint Your Token!</h2>
+      <pre>{JSON.stringify(tokenNames, null, 2)}</pre>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -170,6 +175,12 @@ export default function MintPPBL2024PreprodToken() {
               </FormItem>
             )}
           />
+          {!!tokenNames && tokenNames.includes(form.getValues().tokenAlias) && (
+            <div className="bg-orange-700 p-3">
+              This tokenAlias is already minted. Please choose a different
+              alias.
+            </div>
+          )}
           <Button type="submit">Mint my token!</Button>
         </form>
       </Form>
