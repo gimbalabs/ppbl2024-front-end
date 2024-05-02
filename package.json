@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
-    "@meshsdk/core": "^1.5.16",
-    "@meshsdk/react": "^1.1.10-beta.4",
+    "@meshsdk/core": "^1.5.11-beta.6",
+    "@meshsdk/react": "^1.1.10-beta.3",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-navigation-menu": "^1.1.4",
