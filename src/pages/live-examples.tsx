@@ -30,7 +30,7 @@ export default function LiveExamplesPage() {
             {network === 0 && (
               <div>
                 <p>
-                  You are connected to Cardano Preprod! Now you can mind a PPBL
+                  You are connected to Cardano Preprod! Now you can mint a PPBL
                   2024 Preprod Token
                 </p>
               </div>
