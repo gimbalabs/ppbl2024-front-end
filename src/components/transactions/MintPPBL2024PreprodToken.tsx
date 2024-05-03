@@ -23,10 +23,19 @@ import {
 import { Input } from "~/components/ui/input";
 import { api } from "~/utils/api";
 import { register } from "module";
+import usePPBL2024Token from "~/hooks/usePPBL2024Token";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 
 export default function MintPPBL2024PreprodToken() {
   const { wallet } = useWallet();
   const address = useAddress();
+  const { connectedContribTokenUnit, contributorName, isLoadingContributor } =
+    usePPBL2024Token();
 
   const [contributorTokenName, setContributorTokenName] = useState<
     string | undefined
@@ -153,37 +162,63 @@ export default function MintPPBL2024PreprodToken() {
     }
   }, [contributorTokenName]);
 
+  if (isLoadingContributor) {
+    return <div className="animate-pulse">Loading Contributor Status</div>;
+  }
+
   return (
-    <div className="flex flex-col w-full">
-      <h2>Mint Your Token!</h2>
-      <pre>{JSON.stringify(tokenNames, null, 2)}</pre>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="tokenAlias"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Enter a token alias</FormLabel>
-                <FormControl>
-                  <Input placeholder="your alias" {...field} />
-                </FormControl>
-                <FormDescription>
-                  Your token will have the name ppbl2024-YOUR_ALIAS
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {!!tokenNames && tokenNames.includes(form.getValues().tokenAlias) && (
-            <div className="bg-orange-700 p-3">
-              This tokenAlias is already minted. Please choose a different
-              alias.
+    <div className="flex w-full flex-col">
+      {connectedContribTokenUnit ? (
+        <h2>You have a PPBL 2024 Preprod Token!</h2>
+      ) : (
+        <>
+          <h2>Mint Your PPBL 2024 Token</h2>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="tokenAlias"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Enter a token alias</FormLabel>
+                    <FormControl>
+                      <Input placeholder="your alias" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Your token will have the name ppbl2024-YOUR_ALIAS
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {!!tokenNames &&
+                tokenNames.includes(form.getValues().tokenAlias) && (
+                  <div className="bg-orange-700 p-3">
+                    This tokenAlias is already minted. Please choose a different
+                    alias.
+                  </div>
+                )}
+              <Button type="submit">Mint my token!</Button>
+            </form>
+          </Form>
+        </>
+      )}
+      <Accordion type="single" collapsible>
+        <AccordionItem value="faucet-1">
+          <AccordionTrigger>
+            View List of PPBL 2024 Preprod Tokens
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {tokenNames?.map((t, i) => (
+                <div key={i} className="flex w-full justify-center items-center bg-accent p-2 text-accent-foreground">
+                  {t}
+                </div>
+              ))}
             </div>
-          )}
-          <Button type="submit">Mint my token!</Button>
-        </form>
-      </Form>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 }

@@ -13,24 +13,19 @@ import {
 import { api } from "~/utils/api";
 import { useEffect, useState } from "react";
 import { hexToString } from "~/utils/text";
+import usePPBL2024Token from "~/hooks/usePPBL2024Token";
 
 export default function PPBLFaucetWithdrawalTx() {
   const address = useAddress();
   const { wallet } = useWallet();
+  const { connectedContribTokenUnit, contributorName, isLoadingContributor } =
+    usePPBL2024Token();
 
   const [outputFaucetUTxO, setOutputFaucetUTxO] = useState<
     Partial<UTxO> | undefined
   >(undefined);
 
-  const [connectedContribTokenUnit, setConnectedContribTokenUnit] = useState<
-    string | undefined
-  >(undefined);
-
   const [contributorPkh, setContributorPkh] = useState<string | undefined>(
-    undefined,
-  );
-
-  const [contributorName, setContributorName] = useState<string | undefined>(
     undefined,
   );
 
@@ -62,7 +57,8 @@ export default function PPBLFaucetWithdrawalTx() {
   ];
 
   // Use Maestro to query input from Faucet address
-  const { data: inputFaucetUTxOs } = api.faucet.getFaucetUTxO.useQuery();
+  const { data: inputFaucetUTxOs, isLoading: isLoadingFaucetUTxO } =
+    api.faucet.getFaucetUTxO.useQuery();
 
   // Calculate the expected output, based on value in input
   // useState and useEffect
@@ -90,25 +86,6 @@ export default function PPBLFaucetWithdrawalTx() {
       setOutputFaucetUTxO(_outputFaucetUTxO);
     }
   }, [inputFaucetUTxOs]);
-
-  useEffect(() => {
-    async function checkPPBLToken() {
-      if (wallet) {
-        // get contributor token
-        const _assets = await wallet.getAssets();
-        _assets.forEach((a: Asset) => {
-          if (
-            a.unit.startsWith(
-              "903c419ee7ebb6bf4687c61fb133d233ef9db2f80e4d734db3fbaf0b",
-            )
-          ) {
-            setConnectedContribTokenUnit(a.unit);
-          }
-        });
-      }
-    }
-    void checkPPBLToken();
-  }, [wallet]);
 
   useEffect(() => {
     if (address) {
@@ -142,7 +119,13 @@ export default function PPBLFaucetWithdrawalTx() {
   async function handleFaucetTx() {
     if (inputFaucetUTxOs) {
       try {
-        console.log("click!", address, faucetAssetToBrowserWallet, inputFaucetUTxOs, outputFaucetUTxO);
+        console.log(
+          "click!",
+          address,
+          faucetAssetToBrowserWallet,
+          inputFaucetUTxOs,
+          outputFaucetUTxO,
+        );
         if (
           address &&
           faucetAssetToBrowserWallet &&
@@ -178,6 +161,9 @@ export default function PPBLFaucetWithdrawalTx() {
           const signedTx = await wallet.signTx(unsignedTx, true);
           const txHash = await wallet.submitTx(signedTx);
           console.log(txHash);
+          alert(
+            `Success! You just completed a successful PPBL Faucet transaction. The transaction has is ${txHash}`,
+          );
         }
       } catch (error) {
         console.log(error);
@@ -186,10 +172,39 @@ export default function PPBLFaucetWithdrawalTx() {
     }
   }
 
+  if (isLoadingFaucetUTxO || isLoadingContributor) {
+    return <div className="animate-pulse">Loading...</div>;
+  }
+
   return (
     <div className="text-white">
-      <h2>Faucet Tx</h2>
-      <Button onClick={handleFaucetTx}>Withdraw from Faucet</Button>
+      {inputFaucetUTxOs && inputFaucetUTxOs.length === 1 ? (
+        <>
+          {connectedContribTokenUnit ? (
+            <>
+              <h2>
+                Use a PPBL 2024 to withdraw tokens from the PPBL Faucet
+                Validator
+              </h2>
+              <div className="my-3 bg-primary p-3 text-primary-foreground">
+                <p>
+                  {inputFaucetUTxOs[0]?.output.amount[1]?.quantity} Tokens
+                  locked in Faucet Address
+                </p>
+              </div>
+              <Button onClick={handleFaucetTx}>
+                Withdraw 1000000 Scaffold Tokens from Faucet
+              </Button>
+            </>
+          ) : (
+            <>You must mint a PPBL 2024 to interact with the PPBL Faucet Demo</>
+          )}
+        </>
+      ) : (
+        <>
+          <h2>Cannot find Faucet UTxO</h2>
+        </>
+      )}
     </div>
   );
 }

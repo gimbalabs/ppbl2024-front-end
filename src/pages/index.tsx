@@ -16,11 +16,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex w-full flex-col items-center justify-center">
-       
+
 
             <div className="flex min-h-[70vh] flex-col items-center justify-center px-5">
               <p className="text-center text-sm text-indigo-300 md:text-2xl">
-                module 101 goes live 2024-05-02
+                welcome to
               </p>
               <h1 className="my-[3rem] text-2xl font-extrabold tracking-tight md:text-[3rem]">
                 Plutus Project-Based Learning 2024
@@ -43,7 +43,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-         
+
         <div className="w-2/3">
           <p className="text-left font-mono text-[1.5rem]">
             ppbl2024 $ <span className="animate-pulse">_</span>

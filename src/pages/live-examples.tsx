@@ -56,21 +56,24 @@ export default function LiveExamplesPage() {
         {network === 0 && (
           <>
             <Card>
-              <CardHeader>Mint a PPBL 2024 Preprod Token</CardHeader>
+              <CardHeader>SLT 100.4 Demo: Mint a PPBL 2024 Preprod Token</CardHeader>
               <CardContent className="w-full">
                 <MintPPBL2024PreprodToken />
               </CardContent>
               <CardFooter>
-                Gimbalabs Open Spaces 2024-05-02: What message should we write
-                here?
+                You will use your PPBL 2024 Preprod Token in a variety of
+                Projects throughout this course.
               </CardFooter>
             </Card>
             <Card>
-              <CardHeader>PPBL 2024 Faucet Demo...</CardHeader>
+              <CardHeader>SLT 100.5 Demo: A Simple Cardano Application</CardHeader>
               <CardContent>
                 <PPBLFaucetWithdrawalTx />
               </CardContent>
-              <CardFooter></CardFooter>
+              <CardFooter>
+                We will use these Scaffold tokens to complete examples projects
+                in the PPBL 2024 Course.
+              </CardFooter>
             </Card>
           </>
         )}
