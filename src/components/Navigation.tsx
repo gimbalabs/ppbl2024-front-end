@@ -31,6 +31,11 @@ const ppblRepoLinks: { title: string; href: string; description: string }[] = [
     description: "Start building smart contracts with Aiken",
   },
   {
+    title: "PPBL 2024 Plu-Ts Examples",
+    href: "https://github.com/nelsonksh/gimbalabs-ppbl2024-plu-ts-examples",
+    description: "Smart contracts written in Plu-Ts",
+  },
+  {
     title: "Transaction Examples",
     href: "https://github.com/gimbalabs/ppbl2024-transaction-examples",
     description: "Learn how Cardano works with transaction examples",
