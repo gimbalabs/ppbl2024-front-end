@@ -27,7 +27,7 @@ const ppblRepoLinks: { title: string; href: string; description: string }[] = [
   },
   {
     title: "PPBL 2024 Aiken Examples",
-    href: "/",
+    href: "https://github.com/gimbalabs/ppbl-2024-aiken-examples",
     description: "Start building smart contracts with Aiken",
   },
   {
