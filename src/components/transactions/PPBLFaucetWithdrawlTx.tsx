@@ -48,14 +48,6 @@ export default function PPBLFaucetWithdrawalTx() {
     },
   };
 
-  const faucetAssetToBrowserWallet: Asset[] = [
-    { unit: "lovelace", quantity: "2000000" },
-    {
-      unit: "5e74a87d8109db21fe3d407950c161cd2df7975f0868e10682a3dbfe7070626c323032342d73636166666f6c642d746f6b656e",
-      quantity: "10",
-    },
-  ];
-
   // Use Maestro to query input from Faucet address
   const { data: inputFaucetUTxOs, isLoading: isLoadingFaucetUTxO } =
     api.faucet.getFaucetUTxO.useQuery();
@@ -122,13 +114,11 @@ export default function PPBLFaucetWithdrawalTx() {
         console.log(
           "click!",
           address,
-          faucetAssetToBrowserWallet,
           inputFaucetUTxOs,
           outputFaucetUTxO,
         );
         if (
           address &&
-          faucetAssetToBrowserWallet &&
           inputFaucetUTxOs[0] &&
           outputFaucetUTxO
         ) {
@@ -142,7 +132,7 @@ export default function PPBLFaucetWithdrawalTx() {
             .sendValue(
               {
                 address:
-                  "addr_test1wpj47k0wgxqy5qtf9kcvge6xq4y4ua7lvz9dgnc7uuy5ugcz5dr76",
+                  "addr_test1wpp780qmzd99t7pykafxu3545pzxgvjj5c4echey470ad4qlsnscq",
                 datum: {
                   value: outgoingDatum,
                   inline: true,
@@ -150,10 +140,13 @@ export default function PPBLFaucetWithdrawalTx() {
               },
               outputFaucetUTxO,
             )
-            .sendAssets(address, faucetAssetToBrowserWallet)
             .sendAssets(address, [
               { unit: "lovelace", quantity: "2000000" },
-              { unit: connectedContribTokenUnit, quantity: "1" }, // make a hook!
+              { unit: connectedContribTokenUnit, quantity: "1" },
+              {
+                unit: "5e74a87d8109db21fe3d407950c161cd2df7975f0868e10682a3dbfe7070626c323032342d73636166666f6c642d746f6b656e",
+                quantity: "10",
+              },
             ]);
 
           console.log("Your Tx: ", tx);
