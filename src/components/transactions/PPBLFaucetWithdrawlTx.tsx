@@ -38,7 +38,7 @@ export default function PPBLFaucetWithdrawalTx() {
     input: {
       outputIndex: 0,
       txHash:
-        "bc7c99a49cd0b498c885d7ed7cfbfd6f8657c8709b4df3b731d46a37655f003b",
+        "1099aafc99e18e36da5933ff81942519f796c6041f5073d99af05c6965d63704",
     },
     output: {
       address:
