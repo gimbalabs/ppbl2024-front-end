@@ -25,7 +25,7 @@ const maestroProvider = new MaestroProvider({
 export const faucetRouter = createTRPCRouter({
   getFaucetUTxO: publicProcedure.query(async () => {
     const utxo: UTxO[] = await maestroProvider.fetchAddressUTxOs(
-      "addr_test1wpj47k0wgxqy5qtf9kcvge6xq4y4ua7lvz9dgnc7uuy5ugcz5dr76",
+      "addr_test1wpp780qmzd99t7pykafxu3545pzxgvjj5c4echey470ad4qlsnscq",
     );
     return utxo;
   }),
