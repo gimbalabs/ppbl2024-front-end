@@ -52,7 +52,7 @@ const liveCodingLinks: { title: string; href: string; description: string }[] =
     {
       title: "Plutus PBL Live Coding",
       href: "https://plutuspbl.io/calendar",
-      description: "Thursdays 1430 UTC",
+      description: "Wednesdays 1430 UTC",
     },
     {
       title: "Gimbalabs Live Open Spaces",
@@ -62,12 +62,12 @@ const liveCodingLinks: { title: string; href: string; description: string }[] =
     {
       title: "Cardano Go Live Coding",
       href: "https://plutuspbl.io/calendar",
-      description: "Thursdays 1430 UTC",
+      description: "Mondays 1300 UTC",
     },
     {
       title: "Mesh Live Coding",
       href: "https://plutuspbl.io/calendar",
-      description: "Thursdays 1430 UTC",
+      description: "Tuesdays 1300 UTC",
     },
   ];
 
