@@ -1,0 +1,16 @@
+{
+    "goals": [
+        {
+            "date": "2024-06-05",
+            "goal": "My goal with PPBL 2024 is to help people understand Cardano development enough that they can contribute to solving meaningful problems.",
+            "name": "James Dunseith",
+            "organization": "Gimbalabs & Andamio"
+        },
+        {
+            "date": "date added",
+            "goal": "Use this as a template. Make a copy in goals.json",
+            "name": "optional",
+            "organization": "optional"
+        }
+    ]
+}
