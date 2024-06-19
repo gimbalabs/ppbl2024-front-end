@@ -18,26 +18,18 @@ export default function AlwaysSucceedsLockingTx() {
   // Learn about useWallet: https://meshjs.dev/react/wallet-hooks#useWallet
   const { wallet } = useWallet();
 
-  // Prepare Datum
-  const alwaysSucceedsDatum: Data = {
-    alternative: 0,
-    fields: ["Hello from PPBL 2024!"], // You can change this message. Then, try to find it via cardano-cli or a blockchain explorer!
-  };
-
   async function onClick() {
-    // Learn about sendValue: https://meshjs.dev/apis/transaction#sendValue
     try {
-      const tx = new Transaction({ initiator: wallet }).sendAssets(
+      const tx = new Transaction({ initiator: wallet }).sendValue(
         {
           address:
-            "addr_test1wqag3rt979nep9g2wtdwu8mr4gz6m4kjdpp5zp705km8wys6t2kla", // An Always Succeeds validator on Preprod
-          // Learn about Inline Datum: https://meshjs.dev/apis/transaction/smart-contract#inlineDatum
+            "addr_test1wqag3rt979nep9g2wtdwu8mr4gz6m4kjdpp5zp705km8wys6t2kla",
           datum: {
-            value: alwaysSucceedsDatum,
+            value: "hello from PPBL 2024!",
             inline: true,
           },
         },
-        [{ unit: "lovelace", quantity: "4321765" }], // You can change this amount. In the Mesh documentation, look for ways to add native assets to this output.
+        { output: { amount: [{ unit: "lovelace", quantity: "4321765" }] } }, // You can change this amount. In the Mesh documentation, look for ways to add native assets to this output.
       );
       const unsignedTx = await tx.build(); // compare to cardano-cli transaction build
       const signedTx = await wallet.signTx(unsignedTx); // compare to cardano-cli transaction sign
