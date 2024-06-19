@@ -29,7 +29,7 @@ export default function NavigationExamples() {
           <p className="text-xl font-bold">{example.title}</p>
           <p>Live Example for Module {example.courseModule}</p>
           <p className="pt-5 text-amber-500 hover:text-amber-300">
-            <Link href={`/live-examples/${201}`}>View Example</Link>
+            <Link href={example.courseModule == 100 ? "/live-examples" : `/live-examples/${example.courseModule}`}>View Example</Link>
           </p>
         </div>
       ))}

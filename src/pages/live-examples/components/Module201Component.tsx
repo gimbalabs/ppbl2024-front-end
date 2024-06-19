@@ -5,10 +5,8 @@ import {
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
-import MintPPBL2024PreprodToken from "~/components/transactions/MintPPBL2024PreprodToken";
-import PPBLFaucetWithdrawalTx from "~/components/transactions/PPBLFaucetWithdrawlTx";
 import SimpleDonationTx from "~/components/transactions/SimpleDonationTx";
-import PPBLFaucetLockingTx from "~/components/transactions/PPBLFaucetLockingTx";
+import AlwaysSucceedsLockingTx from "~/components/transactions/AlwaysSucceedsLockingTx";
 
 export default function Module201Component() {
   const network = useNetwork();
@@ -27,16 +25,21 @@ export default function Module201Component() {
             <CardContent className="w-full">
               <SimpleDonationTx />
             </CardContent>
-            <CardFooter>Some details</CardFooter>
+            <CardFooter>
+              All of the values for this transaction are hard-coded. Try to
+              build a form that allows the user to decide how much tAda to
+              donate, or one where they can choose from a menu of donation
+              recipients.
+            </CardFooter>
           </Card>
           <Card>
             <CardHeader>
-              SLT 201.4 Demo: Locking Tokens in the Faucet Validator
+              SLT 201.4 Demo: Locking Tokens in the Always Succeeds Validator
             </CardHeader>
             <CardContent className="w-full">
-              <PPBLFaucetLockingTx />
+              <AlwaysSucceedsLockingTx />
             </CardContent>
-            <CardFooter>Some details</CardFooter>
+            <CardFooter>Customize this transaction by changing hard-coded values in the AlwaysSucceedsLockingTx component.</CardFooter>
           </Card>
         </>
       )}
