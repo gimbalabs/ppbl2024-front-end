@@ -113,7 +113,7 @@ export default function PPBLFaucetWithdrawalTx() {
   // outgoing datum
   const outgoingDatum: Data = {
     alternative: 0,
-    fields: [1000000, "ppbl2024-scaffold-token"], // hex or string??
+    fields: [1000000, "ppbl2024-scaffold-token"],
   };
 
   async function handleFaucetTx() {

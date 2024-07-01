@@ -1,0 +1,16 @@
+{
+    "goals": [
+        {
+            "date": "2024-06-05",
+            "goal": "Gimbalabs provides open, replicable safe spaces to learn, to explore, and to empower individuals and organizations anywhere so that we can solve meaningful problems.",
+            "name": "Gimbalabs Team",
+            "organization": "Gimbalabs"
+        },
+        {
+            "date": "date added",
+            "goal": "Use this as a template. Make a copy in goals.json",
+            "name": "optional",
+            "organization": "optional"
+        }
+    ]
+}
