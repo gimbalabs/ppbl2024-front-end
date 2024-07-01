@@ -11,6 +11,12 @@
             "goal": "Use this as a template. Make a copy in goals.json",
             "name": "optional",
             "organization": "optional"
+        },
+        {
+            "date": "2024-07-01",
+            "goal": "Playing with PPBL",
+            "name": "It's Me",
+            "organization": "Work in Progress"
         }
     ]
 }
