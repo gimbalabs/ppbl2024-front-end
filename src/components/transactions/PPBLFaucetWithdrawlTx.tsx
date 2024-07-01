@@ -15,6 +15,26 @@ import { useEffect, useState } from "react";
 import { hexToString } from "~/utils/text";
 import usePPBL2024Token from "~/hooks/usePPBL2024Token";
 
+function selectUtxoWithMostProjectTokens(inputFaucetUTxOs: UTxO[]): UTxO {
+  return inputFaucetUTxOs.reduce((a: UTxO, b: UTxO) => {
+    const a_tokens = a.output.amount.find(
+      (token) =>
+        token.unit ===
+        "5e74a87d8109db21fe3d407950c161cd2df7975f0868e10682a3dbfe7070626c323032342d73636166666f6c642d746f6b656e",
+    )!;
+    const b_tokens = b.output.amount.find(
+      (token) =>
+        token.unit ===
+        "5e74a87d8109db21fe3d407950c161cd2df7975f0868e10682a3dbfe7070626c323032342d73636166666f6c642d746f6b656e",
+    )!;
+    if (parseInt(a_tokens.quantity) > parseInt(b_tokens.quantity)) {
+      return a;
+    } else {
+      return b;
+    }
+  });
+}
+
 export default function PPBLFaucetWithdrawalTx() {
   const address = useAddress();
   const { wallet } = useWallet();
@@ -24,6 +44,9 @@ export default function PPBLFaucetWithdrawalTx() {
   const [outputFaucetUTxO, setOutputFaucetUTxO] = useState<
     Partial<UTxO> | undefined
   >(undefined);
+  const [inputFaucetUTxO, setInputFaucetUTxO] = useState<UTxO | undefined>(
+    undefined,
+  );
 
   const [contributorPkh, setContributorPkh] = useState<string | undefined>(
     undefined,
@@ -64,26 +87,31 @@ export default function PPBLFaucetWithdrawalTx() {
   // useState and useEffect
 
   useEffect(() => {
-    if (
-      inputFaucetUTxOs?.[0]?.output.amount?.[0] &&
-      inputFaucetUTxOs[0].output.amount[1]
-    ) {
-      const updatedQuantity =
-        parseInt(inputFaucetUTxOs[0].output.amount[1].quantity) - 1000000;
-      const _outputFaucetUTxO: Partial<UTxO> = {
-        output: {
-          address: inputFaucetUTxOs[0].output.address,
-          amount: [
-            inputFaucetUTxOs[0].output.amount[0],
-            {
-              unit: inputFaucetUTxOs[0].output.amount[1].unit,
-              quantity: updatedQuantity.toString(),
-            },
-          ],
-          plutusData: inputFaucetUTxOs[0].output.plutusData,
-        },
-      };
-      setOutputFaucetUTxO(_outputFaucetUTxO);
+    if (inputFaucetUTxOs) {
+      const inputFaucetUTxO = selectUtxoWithMostProjectTokens(inputFaucetUTxOs);
+      setInputFaucetUTxO(inputFaucetUTxO);
+
+      if (
+        inputFaucetUTxO.output.amount?.[0] &&
+        inputFaucetUTxO.output.amount[1]
+      ) {
+        const updatedQuantity =
+          parseInt(inputFaucetUTxO.output.amount[1].quantity) - 1000000;
+        const _outputFaucetUTxO: Partial<UTxO> = {
+          output: {
+            address: inputFaucetUTxO.output.address,
+            amount: [
+              inputFaucetUTxO.output.amount[0],
+              {
+                unit: inputFaucetUTxO.output.amount[1].unit,
+                quantity: updatedQuantity.toString(),
+              },
+            ],
+            plutusData: inputFaucetUTxO.output.plutusData,
+          },
+        };
+        setOutputFaucetUTxO(_outputFaucetUTxO);
+      }
     }
   }, [inputFaucetUTxOs]);
 
@@ -129,14 +157,14 @@ export default function PPBLFaucetWithdrawalTx() {
         if (
           address &&
           faucetAssetToBrowserWallet &&
-          inputFaucetUTxOs[0] &&
+          inputFaucetUTxO &&
           outputFaucetUTxO
         ) {
           const tx = new Transaction({ initiator: wallet })
             .redeemValue({
-              value: inputFaucetUTxOs[0],
+              value: inputFaucetUTxO,
               script: referenceUTxO,
-              datum: inputFaucetUTxOs[0],
+              datum: inputFaucetUTxO,
               redeemer: redeemer,
             })
             .sendValue(
@@ -178,7 +206,7 @@ export default function PPBLFaucetWithdrawalTx() {
 
   return (
     <div className="text-white">
-      {inputFaucetUTxOs && inputFaucetUTxOs.length === 1 ? (
+      {inputFaucetUTxO ? (
         <>
           {connectedContribTokenUnit ? (
             <>
@@ -188,8 +216,8 @@ export default function PPBLFaucetWithdrawalTx() {
               </h2>
               <div className="my-3 bg-primary p-3 text-primary-foreground">
                 <p>
-                  {inputFaucetUTxOs[0]?.output.amount[1]?.quantity} Tokens
-                  locked in Faucet Address
+                  {inputFaucetUTxO?.output.amount[1]?.quantity} Tokens locked in
+                  Faucet Address
                 </p>
               </div>
               <Button onClick={handleFaucetTx}>
