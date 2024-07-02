@@ -45,6 +45,11 @@ const ppblRepoLinks: { title: string; href: string; description: string }[] = [
     href: "https://github.com/gimbalabs/mesh-asteria-demo-app",
     description: "Work in progress: Asteria game demo",
   },
+  {
+    title: "Handy Project Units",
+    href: "https://github.com/nelsonksh/Handy-Project-Units",
+    description: "Simple project units built for convenience",
+  }
 ];
 
 const liveCodingLinks: { title: string; href: string; description: string }[] =
