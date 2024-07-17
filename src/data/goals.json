@@ -17,6 +17,12 @@
             "goal": "Playing with PPBL",
             "name": "It's Me",
             "organization": "Work in Progress"
+        },
+        {
+            "date": "2024-07-13",
+            "goal": "Develop and publish a project involving smart contracts on the Cardano blockchain that is useful for my daily life",
+            "name": "GerardVM",
+            "organization": ""
         }
     ]
 }
