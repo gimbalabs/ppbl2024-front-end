@@ -60,7 +60,7 @@ export function MintNativeAssetWithConnectedPKH() {
       const _pkh = resolvePaymentKeyHash(address);
       setConnectedPKH(_pkh);
 
-      // 3. Create a Script File
+      // 3. Create a Native Script
       const _nativeScript: NativeScript = {
         type: "sig",
         keyHash: _pkh,
