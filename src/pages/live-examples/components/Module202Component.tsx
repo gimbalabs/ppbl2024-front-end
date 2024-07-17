@@ -1,4 +1,6 @@
-import { CardanoWallet, useNetwork } from "@meshsdk/react";
+import { useNetwork } from "@meshsdk/react";
+import { MintNativeAssetWithAppWallet, MintNativeAssetWithConnectedPKH } from "~/components/transactions/MintNativeAssets";
+
 import {
   Card,
   CardContent,
@@ -19,17 +21,19 @@ export default function Module202Component() {
         <>
           <Card>
             <CardHeader>
-              SLT 202.x Demo:
+              SLT 202.3 Demo #1:
             </CardHeader>
             <CardContent className="w-full">
+              <MintNativeAssetWithConnectedPKH />
             </CardContent>
             <CardFooter>Some details</CardFooter>
           </Card>
           <Card>
             <CardHeader>
-              SLT 202.x Demo:
+              SLT 202.3 Demo #2:
             </CardHeader>
             <CardContent className="w-full">
+              <MintNativeAssetWithAppWallet />
             </CardContent>
             <CardFooter>Some details</CardFooter>
           </Card>
