@@ -36,7 +36,7 @@ const appWallet = new AppWallet({
   key: {
     type: "cli",
     payment:
-      "5820638b8980f7dfec333f1eaed0ca2c6aedeecc2270d99a616a2140eafecfc1dd8a", // THIS IS A PRIVATE KEY - see note
+      "5820b869865d878ecc4d46fbf92be64ab2504d81bb05b9fc60531a7dd3444695d3e0", // THIS IS A PRIVATE KEY - see note
   },
   fetcher: maestroProvider,
   submitter: maestroProvider,
@@ -132,7 +132,7 @@ export function MintNativeAssetWithAppWallet() {
 
   // UI Component
   return (
-    <div className="grid grid-cols-1 gap-5 px-5 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-5 px-5">
       <div className="flex w-full flex-col justify-center">
         <div className="bg-white p-3 text-xs text-black">
           <h2 className="text-lg">Native Script:</h2>

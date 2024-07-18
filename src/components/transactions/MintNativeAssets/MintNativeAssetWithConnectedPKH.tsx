@@ -127,7 +127,7 @@ export function MintNativeAssetWithConnectedPKH() {
 
   // UI Component
   return (
-    <div className="grid grid-cols-1 gap-5 px-5 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-5 px-5">
       <div className="flex w-full flex-col justify-center">
         <div className="bg-white p-3 text-xs text-black">
           <h2 className="text-lg">Native Script:</h2>
