@@ -117,9 +117,11 @@ export function MintNativeAssetWithAppWallet() {
         // Build
         const unsignedTx = await mintingTx.build();
         // Sign
-        const signedTx = await wallet.signTx(unsignedTx, true);
+        const appSignedTx = await wallet.signTx(unsignedTx, true);
+        const userSignedTx = await wallet.signTx(appSignedTx, true);
+        
         // Submit
-        const txHash = await wallet.submitTx(signedTx);
+        const txHash = await wallet.submitTx(userSignedTx);
         alert(`Successful Minting Transaction: ${txHash}`);
       }
     } catch (error) {
