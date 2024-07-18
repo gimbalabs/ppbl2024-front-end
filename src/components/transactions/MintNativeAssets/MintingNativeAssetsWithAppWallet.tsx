@@ -117,7 +117,7 @@ export function MintNativeAssetWithAppWallet() {
         // Build
         const unsignedTx = await mintingTx.build();
         // Sign
-        const appSignedTx = await wallet.signTx(unsignedTx, true);
+        const appSignedTx = await appWallet.signTx(unsignedTx, true);
         const userSignedTx = await wallet.signTx(appSignedTx, true);
         
         // Submit
