@@ -1,11 +1,13 @@
-import { CardanoWallet, useNetwork } from "@meshsdk/react";
+import { useNetwork } from "@meshsdk/react";
+import GalleryComponent from "~/components/transactions/Module203/GalleryComponent";
+import MintReferenceTokenPair from "~/components/transactions/Module203/MintReferenceTokenPair";
+import UpdateReferenceTokenDatum from "~/components/transactions/Module203/UpdateReferenceTokenDatum";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "~/components/ui/card";
-
 
 export default function Module203Component() {
   const network = useNetwork();
@@ -18,20 +20,25 @@ export default function Module203Component() {
       {network === 0 && (
         <>
           <Card>
-            <CardHeader>
-              SLT 203.x Demo:
-            </CardHeader>
+            <CardHeader>SLT 203.4 Demo - Part 1</CardHeader>
             <CardContent className="w-full">
+              <MintReferenceTokenPair />
             </CardContent>
-            <CardFooter>Some details</CardFooter>
+            <CardFooter>Reference Token Pair, CIP-68 (sort of), ...</CardFooter>
           </Card>
           <Card>
-            <CardHeader>
-              SLT 203.x Demo:
-            </CardHeader>
+            <CardHeader>SLT 203.4 Demo - Part 2</CardHeader>
             <CardContent className="w-full">
+              <UpdateReferenceTokenDatum />
             </CardContent>
-            <CardFooter>Some details</CardFooter>
+            <CardFooter>Reference Token Pair, CIP-68 (sort of), ...</CardFooter>
+          </Card>
+          <Card>
+            <CardHeader>SLT 203.4 Gallery:</CardHeader>
+            <CardContent className="w-full">
+              <GalleryComponent />
+            </CardContent>
+            <CardFooter>Put a gallery here</CardFooter>
           </Card>
         </>
       )}

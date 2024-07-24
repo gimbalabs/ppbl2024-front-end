@@ -5,20 +5,18 @@
 // https://github.com/gimbalabs/ppbl2024-transaction-examples/blob/main/cardano-cli/scripts/module202/mint-native-assets-automate-policy_id.sh
 
 import { useAddress, useWallet } from "@meshsdk/react";
+import type { AssetMetadata, Mint, NativeScript } from "@meshsdk/core";
 import {
   AppWallet,
-  AssetMetadata,
   ForgeScript,
-  Mint,
-  NativeScript,
+  MaestroProvider,
   Transaction,
   resolveNativeScriptHash,
   resolvePaymentKeyHash,
-  MaestroProvider
 } from "@meshsdk/core";
 import { Button } from "../../ui/button";
 
-const apiKey = process.env.NEXT_PUBLIC_MAESTRO_PREPROD_KEY
+const apiKey = process.env.NEXT_PUBLIC_MAESTRO_PREPROD_KEY;
 
 const maestroProvider = new MaestroProvider({
   network: "Preprod",
@@ -119,7 +117,7 @@ export function MintNativeAssetWithAppWallet() {
         // Sign
         const appSignedTx = await appWallet.signTx(unsignedTx, true);
         const userSignedTx = await wallet.signTx(appSignedTx, true);
-        
+
         // Submit
         const txHash = await wallet.submitTx(userSignedTx);
         alert(`Successful Minting Transaction: ${txHash}`);

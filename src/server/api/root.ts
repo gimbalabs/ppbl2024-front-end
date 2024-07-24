@@ -2,6 +2,7 @@ import { postRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { ppbl2024TokenMintTxRouter } from "./routers/ppbl2024TokenMintTx";
 import { faucetRouter } from "./routers/faucet";
+import { referenceTokensRouter } from "./routers/referenceTokens";
 
 /**
  * This is the primary router for your server.
@@ -11,7 +12,8 @@ import { faucetRouter } from "./routers/faucet";
 export const appRouter = createTRPCRouter({
   post: postRouter,
   ppbl2024TokenMintTx: ppbl2024TokenMintTxRouter,
-  faucet: faucetRouter
+  faucet: faucetRouter,
+  referenceTokens: referenceTokensRouter,
 });
 
 // export type definition of API

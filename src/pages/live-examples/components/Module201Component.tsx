@@ -1,4 +1,4 @@
-import { CardanoWallet, useNetwork } from "@meshsdk/react";
+import { useNetwork } from "@meshsdk/react";
 import {
   Card,
   CardContent,

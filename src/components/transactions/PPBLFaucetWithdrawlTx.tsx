@@ -38,7 +38,7 @@ function selectUtxoWithMostProjectTokens(inputFaucetUTxOs: UTxO[]): UTxO {
 export default function PPBLFaucetWithdrawalTx() {
   const address = useAddress();
   const { wallet } = useWallet();
-  const { connectedContribTokenUnit, contributorName, isLoadingContributor } =
+  const { connectedContribTokenUnit, isLoadingContributor } =
     usePPBL2024Token();
 
   const [outputFaucetUTxO, setOutputFaucetUTxO] = useState<

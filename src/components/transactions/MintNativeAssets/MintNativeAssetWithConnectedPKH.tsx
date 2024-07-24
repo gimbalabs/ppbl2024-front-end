@@ -5,11 +5,13 @@
 // https://github.com/gimbalabs/ppbl2024-transaction-examples/blob/main/cardano-cli/scripts/module202/mint-native-assets-automate-policy_id.sh
 
 import { useAddress, useWallet } from "@meshsdk/react";
-import {
+import type {
   AssetMetadata,
-  ForgeScript,
   Mint,
   NativeScript,
+} from "@meshsdk/core";
+import {
+  ForgeScript,
   Transaction,
   resolveNativeScriptHash,
   resolvePaymentKeyHash,

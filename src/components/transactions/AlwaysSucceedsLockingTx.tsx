@@ -10,7 +10,7 @@
 // Actually, to do this, you'll need tokens, which is the topic of the next module!
 // Then, you'll be able to compile your own validator, as introduced in Module 101
 import { useWallet } from "@meshsdk/react";
-import { Data, Transaction } from "@meshsdk/core";
+import { Transaction } from "@meshsdk/core";
 import { Button } from "../ui/button";
 import Link from "next/link";
 

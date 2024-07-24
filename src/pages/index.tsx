@@ -2,7 +2,6 @@ import Head from "next/head";
 import { DiscordLogoIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import Image from "next/image";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 export default function Home() {
   return (
