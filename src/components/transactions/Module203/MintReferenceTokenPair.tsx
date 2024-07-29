@@ -15,7 +15,12 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import { Data, Mint, Recipient, Transaction } from "@meshsdk/core";
+import {
+  type Data,
+  type Mint,
+  type Recipient,
+  Transaction,
+} from "@meshsdk/core";
 
 export default function MintReferenceTokenPair() {
   const { wallet } = useWallet();

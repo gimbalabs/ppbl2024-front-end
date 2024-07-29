@@ -14,18 +14,17 @@ import {
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import {
-  Action,
-  AssetExtended,
-  Data,
-  Mint,
-  PlutusScript,
-  Recipient,
+  type Action,
+  type AssetExtended,
+  type Data,
+  type PlutusScript,
+  type Recipient,
   Transaction,
-  UTxO,
+  type UTxO,
   resolveScriptRef,
 } from "@meshsdk/core";
 import { useEffect, useState } from "react";
-import { hexToString, stringToHex } from "@meshsdk/mesh-csl";
+import { hexToString } from "@meshsdk/mesh-csl";
 
 export default function UpdateReferenceTokenDatum() {
   const { wallet } = useWallet();
