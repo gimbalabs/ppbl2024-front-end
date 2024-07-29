@@ -21,6 +21,7 @@ import {
   type Recipient,
   Transaction,
 } from "@meshsdk/core";
+import { imageUrl, referenceValidatorAddress } from "lesson2034.config";
 
 export default function MintReferenceTokenPair() {
   const { wallet } = useWallet();
@@ -56,11 +57,10 @@ export default function MintReferenceTokenPair() {
     if (address && wallet && forgingScript && values.tokenName) {
       const datum: Data = {
         alternative: 0,
-        fields: ["https://gimbalabs.com/g.png", "Just a G"],
+        fields: [imageUrl, "Just a G"],
       };
       const referenceTokenRecipient: Recipient = {
-        address:
-          "addr_test1wq8srpa86unvl7whmf8ct9fja8zrnvgv5ejgw68ead27desd63s48",
+        address: referenceValidatorAddress,
         datum: {
           value: datum,
           inline: true,
@@ -99,14 +99,11 @@ export default function MintReferenceTokenPair() {
 
   return (
     <div>
-      <h1>Oh mint</h1>
-      <p>
+      <h1>Mint a Token Pair</h1>
+      <p className="my-5">
         This is very similar to the token you minted in Module 100. There is
         different datum, and the validator code is written in Aiken instead of
-        Plutus. But a lot of the ideas are the same.
-      </p>
-      <p>
-        What is not here: duplication protection. What should we do about that?
+        Plutus.
       </p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

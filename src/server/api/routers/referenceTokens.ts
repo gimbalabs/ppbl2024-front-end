@@ -1,4 +1,11 @@
-import { AppWallet, ForgeScript, MaestroProvider, NativeScript, UTxO } from "@meshsdk/core";
+import {
+  AppWallet,
+  ForgeScript,
+  MaestroProvider,
+  type NativeScript,
+  type UTxO,
+} from "@meshsdk/core";
+import { mintingPkh, referenceValidatorAddress } from "lesson2034.config";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -24,7 +31,7 @@ const apiKey = getMaestroApiKey();
 
 const mintingScript: NativeScript = {
   type: "sig",
-  keyHash: "cec916165d5a5d1fe8ec90692cdfbaa8db66ffbc3ddb9e17ca0b8883",
+  keyHash: mintingPkh,
 };
 
 const maestroProvider = new MaestroProvider({
@@ -48,7 +55,7 @@ const policyWallet = new AppWallet({
 export const referenceTokensRouter = createTRPCRouter({
   getReferenceUTxOs: publicProcedure.query(async () => {
     const utxo: UTxO[] = await maestroProvider.fetchAddressUTxOs(
-      "addr_test1wq8srpa86unvl7whmf8ct9fja8zrnvgv5ejgw68ead27desd63s48",
+      referenceValidatorAddress,
     );
     return utxo;
   }),
