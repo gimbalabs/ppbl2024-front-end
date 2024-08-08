@@ -5,17 +5,19 @@
 import { useWallet } from "@meshsdk/react";
 import { Transaction } from "@meshsdk/core";
 import { Button } from "../ui/button";
+import { useState } from "react";
 
 export default function SimpleDonationTx() {
   // Learn about useWallet: https://meshjs.dev/react/wallet-hooks#useWallet
     const { wallet } = useWallet();
+    const [amount, setAmount] = useState('5000000');
 
   async function onClick() {
     // Learn about sendLovelace: https://meshjs.dev/apis/transaction
     try {
       const tx = new Transaction({ initiator: wallet }).sendLovelace(
         "addr_test1vpvx0sacufuypa2k4sngk7q40zc5c4npl337uusdh64kv0c7e4cxr", // A Preprod address used by the Mesh team
-        "5000000", // 5000000 tLovelace = 5 tAda
+        amount, // 5000000 tLovelace = 5 tAda
       );
       const unsignedTx = await tx.build(); // compare to cardano-cli transaction build
       const signedTx = await wallet.signTx(unsignedTx); // compare to cardano-cli transaction sign
@@ -29,8 +31,11 @@ export default function SimpleDonationTx() {
 
   return (
     <div className="flex flex-col w-full justify-center items-center">
-      <p className="text-2xl pb-5">Donate 5 tAda to Mesh Team!</p>
-      <Button onClick={onClick}>Donate 5 tAda</Button>
+      <p className="text-2xl pb-5">Donate 5 tAda or set your own amount to Mesh Team!</p>
+      <form>
+        <input type='text' name='Amount' onChange={(event) => {setAmount((event.target.value*1000000).toString())}} style={{color: 'black'}}/>
+      </form>
+      <Button onClick={onClick}>Donate to tAda</Button>
     </div>
   );
 }
