@@ -20,7 +20,7 @@ export default function AlwaysSucceedsLockingTx() {
 
   async function onClick() {
     try {
-      const tx = new Transaction({ initiator: wallet }).sendValue(
+      const tx = new Transaction({ initiator: wallet }).sendLovelace(
         {
           address:
             "addr_test1wqag3rt979nep9g2wtdwu8mr4gz6m4kjdpp5zp705km8wys6t2kla",
@@ -29,7 +29,7 @@ export default function AlwaysSucceedsLockingTx() {
             inline: true,
           },
         },
-        { output: { amount: [{ unit: "lovelace", quantity: "4321765" }] } }, // You can change this amount. In the Mesh documentation, look for ways to add native assets to this output.
+        "4321765",
       );
       const unsignedTx = await tx.build(); // compare to cardano-cli transaction build
       const signedTx = await wallet.signTx(unsignedTx); // compare to cardano-cli transaction sign

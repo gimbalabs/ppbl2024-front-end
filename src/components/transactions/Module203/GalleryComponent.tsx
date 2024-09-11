@@ -5,7 +5,8 @@
 
 import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
-import { hexToString, parseDatumCbor } from "@meshsdk/mesh-csl";
+import { parseDatumCbor } from "@meshsdk/core-csl";
+import { hexToString } from "@meshsdk/core";
 
 // This will also be helpful in Module 204 -- in fact, maybe that's really what this is for!!
 
@@ -16,11 +17,8 @@ type GalleryDatum = {
 
 type OnChainDatum = {
   constructor: number;
-  fields: [
-    {bytes: string},
-    {bytes: string}
-  ];
-}
+  fields: [{ bytes: string }, { bytes: string }];
+};
 
 export default function GalleryComponent() {
   const [galleryDatum, setGalleryDatum] = useState<GalleryDatum[] | undefined>(
@@ -48,7 +46,7 @@ export default function GalleryComponent() {
     }
   }, [data]);
 
-  if (isLoading) return "Loading"
+  if (isLoading) return "Loading";
 
   return (
     <div>

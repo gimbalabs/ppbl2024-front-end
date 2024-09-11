@@ -5,11 +5,7 @@
 // https://github.com/gimbalabs/ppbl2024-transaction-examples/blob/main/cardano-cli/scripts/module202/mint-native-assets-automate-policy_id.sh
 
 import { useAddress, useWallet } from "@meshsdk/react";
-import type {
-  AssetMetadata,
-  Mint,
-  NativeScript,
-} from "@meshsdk/core";
+import type { AssetMetadata, Mint, NativeScript } from "@meshsdk/core";
 import {
   ForgeScript,
   Transaction,
@@ -86,7 +82,7 @@ export function MintNativeAssetWithConnectedPKH() {
   async function onClick() {
     // Learn about Minting with Mesh: https://meshjs.dev/apis/transaction/minting
     try {
-      if (address) {
+      if (address && !!forgingScript) {
         // 5. Set Variables
         // You can change these values:
         const assetMetadata: AssetMetadata = {

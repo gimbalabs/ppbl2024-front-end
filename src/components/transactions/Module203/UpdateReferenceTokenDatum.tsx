@@ -22,7 +22,7 @@ import {
   type UTxO,
 } from "@meshsdk/core";
 import { useEffect, useState } from "react";
-import { hexToString } from "@meshsdk/mesh-csl";
+import { hexToString } from "@meshsdk/core";
 import {
   policyId,
   referenceValidatorAddress,
@@ -129,7 +129,7 @@ export default function UpdateReferenceTokenDatum() {
         },
       };
 
-      const redeemer: Partial<Action> = {
+      const redeemer: Pick<Action, "data"> = {
         data: {
           alternative: 0,
           fields: [
@@ -152,7 +152,7 @@ export default function UpdateReferenceTokenDatum() {
         });
         tx.sendAssets(referenceTokenRecipient, [
           { unit: "lovelace", quantity: "2000000" },
-          { unit: referenceTokenUnit, quantity: "1" },
+          { unit: referenceTokenUnit ?? "", quantity: "1" },
         ]);
         tx.sendAssets(address, [
           { unit: "lovelace", quantity: "2000000" },

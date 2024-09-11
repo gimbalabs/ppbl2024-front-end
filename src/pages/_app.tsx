@@ -1,4 +1,5 @@
 import { type AppType } from "next/app";
+import "@meshsdk/react/styles.css";
 import { MeshProvider } from "@meshsdk/react";
 
 import { api } from "~/utils/api";

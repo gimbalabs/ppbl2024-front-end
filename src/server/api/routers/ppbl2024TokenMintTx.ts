@@ -1,9 +1,9 @@
 import {
   AppWallet,
-  Asset,
+  type Asset,
   ForgeScript,
   MaestroProvider,
-  NativeScript,
+  type NativeScript,
 } from "@meshsdk/core";
 import { z } from "zod";
 
@@ -52,21 +52,26 @@ const policyWallet = new AppWallet({
   },
 });
 
-
-
 export const ppbl2024TokenMintTxRouter = createTRPCRouter({
   forgingScript: publicProcedure.query(() => {
     return forgingScript;
   }),
 
   listTokenNames: publicProcedure.query(async () => {
-    const _tns: { assets: Asset[], next: string | number | null } = await maestroProvider.fetchCollectionAssets("903c419ee7ebb6bf4687c61fb133d233ef9db2f80e4d734db3fbaf0b")
-    const _222s = _tns.assets.filter((a) => a.unit.startsWith("903c419ee7ebb6bf4687c61fb133d233ef9db2f80e4d734db3fbaf0b" + "323232"))
-    const _names: string[] = []
+    const _tns: { assets: Asset[]; next: string | number | null } =
+      await maestroProvider.fetchCollectionAssets(
+        "903c419ee7ebb6bf4687c61fb133d233ef9db2f80e4d734db3fbaf0b",
+      );
+    const _222s = _tns.assets.filter((a) =>
+      a.unit.startsWith(
+        "903c419ee7ebb6bf4687c61fb133d233ef9db2f80e4d734db3fbaf0b" + "323232",
+      ),
+    );
+    const _names: string[] = [];
     _222s.forEach((n) => {
-        _names.push(hexToString(n.unit.substring(80)))
-    })
-    return _names
+      _names.push(hexToString(n.unit.substring(80)));
+    });
+    return _names;
   }),
 
   signAndSubmitTx: publicProcedure
@@ -74,7 +79,7 @@ export const ppbl2024TokenMintTxRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       try {
         console.log("check101", input);
-        const appSignedTx = await policyWallet.signTx(input.unsignedTx, true);
+        const appSignedTx = policyWallet.signTx(input.unsignedTx, true);
         console.log("check102", appSignedTx);
         const txHash = await policyWallet.submitTx(appSignedTx);
         console.log("Transaction successfully submitted!", txHash);

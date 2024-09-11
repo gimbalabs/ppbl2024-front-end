@@ -1,14 +1,15 @@
 import { useAddress, useWallet } from "@meshsdk/react";
 import { Button } from "../ui/button";
 import {
-  Action,
-  Asset,
-  Data,
-  PlutusScript,
+  type Action,
+  type Asset,
+  type Data,
+  type PlutusScript,
   Transaction,
-  UTxO,
+  type UTxO,
   resolvePaymentKeyHash,
   resolveScriptRef,
+  MeshTxBuilder,
 } from "@meshsdk/core";
 import { api } from "~/utils/api";
 import { useEffect, useState } from "react";
@@ -36,13 +37,14 @@ function selectUtxoWithMostProjectTokens(inputFaucetUTxOs: UTxO[]): UTxO {
 }
 
 export default function PPBLFaucetWithdrawalTx() {
+  const mesh = new MeshTxBuilder();
   const address = useAddress();
   const { wallet } = useWallet();
   const { connectedContribTokenUnit, isLoadingContributor } =
     usePPBL2024Token();
 
-  const [outputFaucetUTxO, setOutputFaucetUTxO] = useState<
-    Partial<UTxO> | undefined
+  const [outputFaucetAssets, setOutputFaucetAssets] = useState<
+    Asset[] | undefined
   >(undefined);
   const [inputFaucetUTxO, setInputFaucetUTxO] = useState<UTxO | undefined>(
     undefined,
@@ -52,7 +54,7 @@ export default function PPBLFaucetWithdrawalTx() {
     undefined,
   );
 
-  const [redeemer, setRedeemer] = useState<Partial<Action> | undefined>(
+  const [redeemer, setRedeemer] = useState<Pick<Action, "data"> | undefined>(
     undefined,
   );
 
@@ -97,20 +99,14 @@ export default function PPBLFaucetWithdrawalTx() {
       ) {
         const updatedQuantity =
           parseInt(inputFaucetUTxO.output.amount[1].quantity) - 1000000;
-        const _outputFaucetUTxO: Partial<UTxO> = {
-          output: {
-            address: inputFaucetUTxO.output.address,
-            amount: [
-              inputFaucetUTxO.output.amount[0],
-              {
-                unit: inputFaucetUTxO.output.amount[1].unit,
-                quantity: updatedQuantity.toString(),
-              },
-            ],
-            plutusData: inputFaucetUTxO.output.plutusData,
+        const _outputFaucetAssets: Asset[] = [
+          inputFaucetUTxO.output.amount[0],
+          {
+            unit: inputFaucetUTxO.output.amount[1].unit,
+            quantity: updatedQuantity.toString(),
           },
-        };
-        setOutputFaucetUTxO(_outputFaucetUTxO);
+        ];
+        setOutputFaucetAssets(_outputFaucetAssets);
       }
     }
   }, [inputFaucetUTxOs]);
@@ -126,7 +122,7 @@ export default function PPBLFaucetWithdrawalTx() {
     if (connectedContribTokenUnit && contributorPkh) {
       const _name = connectedContribTokenUnit.substring(56);
 
-      const _redeemer: Partial<Action> = {
+      const _redeemer: Pick<Action, "data"> = {
         data: {
           alternative: 0,
           fields: [contributorPkh, hexToString(_name)],
@@ -152,22 +148,27 @@ export default function PPBLFaucetWithdrawalTx() {
           address,
           faucetAssetToBrowserWallet,
           inputFaucetUTxOs,
-          outputFaucetUTxO,
+          outputFaucetAssets,
         );
         if (
           address &&
           faucetAssetToBrowserWallet &&
           inputFaucetUTxO &&
-          outputFaucetUTxO
+          outputFaucetAssets
         ) {
-          const tx = new Transaction({ initiator: wallet })
-            .redeemValue({
-              value: inputFaucetUTxO,
-              script: referenceUTxO,
-              datum: inputFaucetUTxO,
-              redeemer: redeemer,
-            })
-            .sendValue(
+          const tx: string = await mesh
+            .spendingPlutusScriptV2()
+            .txIn(
+              inputFaucetUTxO.input.txHash,
+              inputFaucetUTxO.input.outputIndex,
+            )
+            .txInInlineDatumPresent()
+            .txInRedeemerValue(redeemer, "JSON")
+            .spendingTxInReference(
+              referenceUTxO.input.txHash,
+              referenceUTxO.input.outputIndex,
+            )
+            .sendAssets(
               {
                 address:
                   "addr_test1wpj47k0wgxqy5qtf9kcvge6xq4y4ua7lvz9dgnc7uuy5ugcz5dr76",
@@ -176,12 +177,12 @@ export default function PPBLFaucetWithdrawalTx() {
                   inline: true,
                 },
               },
-              outputFaucetUTxO,
+              outputFaucetAssets,
             )
             .sendAssets(address, faucetAssetToBrowserWallet)
             .sendAssets(address, [
               { unit: "lovelace", quantity: "2000000" },
-              { unit: connectedContribTokenUnit, quantity: "1" }, // make a hook!
+              { unit: connectedContribTokenUnit ?? "", quantity: "1" }, // make a hook!
             ]);
 
           console.log("Your Tx: ", tx);
