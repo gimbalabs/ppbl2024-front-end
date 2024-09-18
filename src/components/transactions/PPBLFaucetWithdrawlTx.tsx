@@ -5,16 +5,28 @@ import {
   type Asset,
   type Data,
   type PlutusScript,
-  Transaction,
   type UTxO,
   resolvePaymentKeyHash,
   resolveScriptRef,
   MeshTxBuilder,
+  MaestroProvider,
 } from "@meshsdk/core";
 import { api } from "~/utils/api";
 import { useEffect, useState } from "react";
 import { hexToString } from "~/utils/text";
 import usePPBL2024Token from "~/hooks/usePPBL2024Token";
+
+export const getEnv = (key: string): string => {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`Environment variable ${key} is not set.`);
+  }
+  return value;
+};
+
+export const getMaestroApiKey = (): string => {
+  return getEnv("MAESTRO_PREPROD_KEY");
+};
 
 function selectUtxoWithMostProjectTokens(inputFaucetUTxOs: UTxO[]): UTxO {
   return inputFaucetUTxOs.reduce((a: UTxO, b: UTxO) => {
@@ -37,9 +49,27 @@ function selectUtxoWithMostProjectTokens(inputFaucetUTxOs: UTxO[]): UTxO {
 }
 
 export default function PPBLFaucetWithdrawalTx() {
-  const mesh = new MeshTxBuilder();
+  const apiKey = getMaestroApiKey();
+
+  const maestro = new MaestroProvider({
+    network: "Preprod",
+    apiKey: apiKey, // Get yours by visiting https://docs.gomaestro.org/docs/Getting-started/Sign-up-login.
+    turboSubmit: false, // Read about paid turbo transaction submission feature at https://docs.gomaestro.org/docs/Dapp%20Platform/Turbo%20Transaction.
+  });
+
+  const mesh = new MeshTxBuilder({
+    fetcher: maestro,
+    submitter: maestro,
+    evaluator: maestro,
+  });
+
   const address = useAddress();
   const { wallet } = useWallet();
+
+  const [collateralUTxO, setCollateralUTxO] = useState<UTxO | undefined>(
+    undefined,
+  );
+
   const { connectedContribTokenUnit, isLoadingContributor } =
     usePPBL2024Token();
 
@@ -132,6 +162,18 @@ export default function PPBLFaucetWithdrawalTx() {
     }
   }, [connectedContribTokenUnit, contributorPkh]);
 
+  useEffect(() => {
+    const getCol = async () => {
+      const _col = await wallet.getCollateral();
+      if (!!_col && _col.length > 0) {
+        setCollateralUTxO(_col[0]);
+      }
+    };
+    if (wallet) {
+      void getCol();
+    }
+  }, [wallet]);
+
   // redeemer
 
   // outgoing datum
@@ -154,9 +196,16 @@ export default function PPBLFaucetWithdrawalTx() {
           address &&
           faucetAssetToBrowserWallet &&
           inputFaucetUTxO &&
-          outputFaucetAssets
+          outputFaucetAssets &&
+          !!collateralUTxO
         ) {
           const tx: string = await mesh
+            .txIn() // fees
+            .txIn() // ppbl2024 token
+            .txInCollateral(
+              collateralUTxO.input.txHash,
+              collateralUTxO.input.outputIndex,
+            ) // collateral
             .spendingPlutusScriptV2()
             .txIn(
               inputFaucetUTxO.input.txHash,
@@ -168,22 +217,16 @@ export default function PPBLFaucetWithdrawalTx() {
               referenceUTxO.input.txHash,
               referenceUTxO.input.outputIndex,
             )
-            .sendAssets(
-              {
-                address:
-                  "addr_test1wpj47k0wgxqy5qtf9kcvge6xq4y4ua7lvz9dgnc7uuy5ugcz5dr76",
-                datum: {
-                  value: outgoingDatum,
-                  inline: true,
-                },
-              },
-              outputFaucetAssets,
-            )
-            .sendAssets(address, faucetAssetToBrowserWallet)
-            .sendAssets(address, [
+            .txOut(address, faucetAssetToBrowserWallet) // faucet token to connected wallet
+            .txOut(address, [
               { unit: "lovelace", quantity: "2000000" },
               { unit: connectedContribTokenUnit ?? "", quantity: "1" }, // make a hook!
-            ]);
+            ]) // ppbl2024 token back to connected wallet
+            .txOut(
+              "addr_test1wpj47k0wgxqy5qtf9kcvge6xq4y4ua7lvz9dgnc7uuy5ugcz5dr76",
+              outputFaucetAssets,
+            ) // faucet validator
+            .txOutInlineDatumValue(outgoingDatum, "JSON");
 
           console.log("Your Tx: ", tx);
           const unsignedTx = await tx.build();

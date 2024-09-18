@@ -1,5 +1,5 @@
-import { Asset } from "@meshsdk/core";
-import { useAddress, useWallet } from "@meshsdk/react";
+import { type Asset } from "@meshsdk/core";
+import { useWallet } from "@meshsdk/react";
 import { useEffect, useState } from "react";
 import { hexToString } from "~/utils/text";
 
@@ -13,9 +13,9 @@ export default function usePPBL2024Token() {
   const [contributorName, setContributorName] = useState<string | undefined>(
     undefined,
   );
-  const [contributorTokenName, setContributorTokenName] = useState<string | undefined>(
-    undefined,
-  );
+  const [contributorTokenName, setContributorTokenName] = useState<
+    string | undefined
+  >(undefined);
 
   const [isLoadingContributor, setIsLoadingContributor] = useState(true);
 
@@ -43,5 +43,10 @@ export default function usePPBL2024Token() {
     void checkPPBLToken();
   }, [wallet]);
 
-  return { connectedContribTokenUnit, contributorName, contributorTokenName, isLoadingContributor };
+  return {
+    connectedContribTokenUnit,
+    contributorName,
+    contributorTokenName,
+    isLoadingContributor,
+  };
 }
