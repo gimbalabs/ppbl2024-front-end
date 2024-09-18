@@ -1,32 +1,31 @@
 import { useAddress, useWallet } from "@meshsdk/react";
 import { Button } from "../ui/button";
 import {
-  type Action,
   type Asset,
-  type Data,
   type PlutusScript,
   type UTxO,
   resolvePaymentKeyHash,
   resolveScriptRef,
   MeshTxBuilder,
   MaestroProvider,
+  stringToHex,
 } from "@meshsdk/core";
 import { api } from "~/utils/api";
 import { useEffect, useState } from "react";
-import { hexToString } from "~/utils/text";
 import usePPBL2024Token from "~/hooks/usePPBL2024Token";
 
-export const getEnv = (key: string): string => {
-  const value = process.env[key];
-  if (!value) {
-    throw new Error(`Environment variable ${key} is not set.`);
-  }
-  return value;
-};
-
-export const getMaestroApiKey = (): string => {
-  return getEnv("MAESTRO_PREPROD_KEY");
-};
+// TODO: FIX
+// export const getEnv = (key: string): string => {
+//   const value = process.env[key];
+//   if (!value) {
+//     throw new Error(`Environment variable ${key} is not set.`);
+//   }
+//   return value;
+// };
+//
+// export const getMaestroApiKey = (): string => {
+//   return getEnv("MAESTRO_PREPROD_KEY");
+// };
 
 function selectUtxoWithMostProjectTokens(inputFaucetUTxOs: UTxO[]): UTxO {
   return inputFaucetUTxOs.reduce((a: UTxO, b: UTxO) => {
@@ -49,11 +48,12 @@ function selectUtxoWithMostProjectTokens(inputFaucetUTxOs: UTxO[]): UTxO {
 }
 
 export default function PPBLFaucetWithdrawalTx() {
-  const apiKey = getMaestroApiKey();
+  // TODO: FIX
+  // const apiKey = getMaestroApiKey();
 
   const maestro = new MaestroProvider({
     network: "Preprod",
-    apiKey: apiKey, // Get yours by visiting https://docs.gomaestro.org/docs/Getting-started/Sign-up-login.
+    apiKey: "292hClTTejbQtFZmxUk5y4LoWjxirYWl", // Get yours by visiting https://docs.gomaestro.org/docs/Getting-started/Sign-up-login.
     turboSubmit: false, // Read about paid turbo transaction submission feature at https://docs.gomaestro.org/docs/Dapp%20Platform/Turbo%20Transaction.
   });
 
@@ -66,27 +66,31 @@ export default function PPBLFaucetWithdrawalTx() {
   const address = useAddress();
   const { wallet } = useWallet();
 
-  const [collateralUTxO, setCollateralUTxO] = useState<UTxO | undefined>(
-    undefined,
-  );
-
+  // Custom hook example - focus of advanced lessons
   const { connectedContribTokenUnit, isLoadingContributor } =
     usePPBL2024Token();
 
+  // useState hooks
+  const [collateralUTxO, setCollateralUTxO] = useState<UTxO | undefined>(
+    undefined,
+  );
   const [outputFaucetAssets, setOutputFaucetAssets] = useState<
     Asset[] | undefined
   >(undefined);
   const [inputFaucetUTxO, setInputFaucetUTxO] = useState<UTxO | undefined>(
     undefined,
   );
-
+  const [ppblTokenUTxO, setPpblTokenUTxO] = useState<UTxO | undefined>(
+    undefined,
+  );
+  const [walletFeesUTxO, setWalletFeesUTxO] = useState<UTxO | undefined>(
+    undefined,
+  );
   const [contributorPkh, setContributorPkh] = useState<string | undefined>(
     undefined,
   );
 
-  const [redeemer, setRedeemer] = useState<Pick<Action, "data"> | undefined>(
-    undefined,
-  );
+  const [redeemer, setRedeemer] = useState<object | undefined>(undefined);
 
   // Hard-coded reference UTxO. There are better ways to do this. Explore at Live Coding.
   const referenceUTxO: UTxO = {
@@ -111,12 +115,8 @@ export default function PPBLFaucetWithdrawalTx() {
     },
   ];
 
-  // Use Maestro to query input from Faucet address
   const { data: inputFaucetUTxOs, isLoading: isLoadingFaucetUTxO } =
     api.faucet.getFaucetUTxO.useQuery();
-
-  // Calculate the expected output, based on value in input
-  // useState and useEffect
 
   useEffect(() => {
     if (inputFaucetUTxOs) {
@@ -152,11 +152,10 @@ export default function PPBLFaucetWithdrawalTx() {
     if (connectedContribTokenUnit && contributorPkh) {
       const _name = connectedContribTokenUnit.substring(56);
 
-      const _redeemer: Pick<Action, "data"> = {
-        data: {
-          alternative: 0,
-          fields: [contributorPkh, hexToString(_name)],
-        },
+      console.log("check _name", _name);
+      const _redeemer = {
+        constructor: 0,
+        fields: [{ bytes: contributorPkh }, { bytes: _name }],
       };
       setRedeemer(_redeemer);
     }
@@ -169,39 +168,70 @@ export default function PPBLFaucetWithdrawalTx() {
         setCollateralUTxO(_col[0]);
       }
     };
+
+    const getUtxo = async () => {
+      const _utxos = await wallet.getUtxos();
+      const _ppblTokenUtxo = _utxos.find((utxo: UTxO) =>
+        utxo.output.amount.some((a) =>
+          a.unit.startsWith(
+            "903c419ee7ebb6bf4687c61fb133d233ef9db2f80e4d734db3fbaf0b",
+          ),
+        ),
+      );
+      if (_ppblTokenUtxo) {
+        setPpblTokenUTxO(_ppblTokenUtxo);
+      }
+      const _lovelace = _utxos.find(
+        (utxo: UTxO) =>
+          utxo.output.amount.length === 1 &&
+          parseInt(utxo.output.amount[0]?.quantity ?? "0") > 5000000,
+      );
+      if (_lovelace) {
+        setWalletFeesUTxO(_lovelace);
+      }
+    };
+
     if (wallet) {
       void getCol();
+      void getUtxo();
     }
   }, [wallet]);
 
-  // redeemer
-
   // outgoing datum
-  const outgoingDatum: Data = {
-    alternative: 0,
-    fields: [1000000, "ppbl2024-scaffold-token"],
+  const outgoingDatum = {
+    constructor: 0,
+    fields: [
+      { int: 1000000 },
+      { bytes: stringToHex("ppbl2024-scaffold-token") },
+    ],
   };
 
   async function handleFaucetTx() {
     if (inputFaucetUTxOs) {
       try {
-        console.log(
-          "click!",
-          address,
-          faucetAssetToBrowserWallet,
-          inputFaucetUTxOs,
-          outputFaucetAssets,
-        );
+        console.log("address", address);
+        console.log("faucetAssetToBrowserWallet", faucetAssetToBrowserWallet);
+        console.log("inputFaucetUTxOs", inputFaucetUTxOs);
+        console.log("inputFaucetUTxO", inputFaucetUTxO);
+        console.log("outputFaucetAssets", outputFaucetAssets);
+
+        console.log("Fees utxo", walletFeesUTxO);
+        console.log("Token utxo", ppblTokenUTxO);
+        console.log("redeemer", redeemer);
+        console.log("connecteContributorTokenUnit", connectedContribTokenUnit);
         if (
           address &&
           faucetAssetToBrowserWallet &&
           inputFaucetUTxO &&
           outputFaucetAssets &&
-          !!collateralUTxO
+          !!collateralUTxO &&
+          !!walletFeesUTxO &&
+          !!ppblTokenUTxO &&
+          !!redeemer
         ) {
-          const tx: string = await mesh
-            .txIn() // fees
-            .txIn() // ppbl2024 token
+          const unsignedTx: string = await mesh
+            .txIn(walletFeesUTxO.input.txHash, walletFeesUTxO.input.outputIndex) // fees
+            .txIn(ppblTokenUTxO.input.txHash, ppblTokenUTxO.input.outputIndex) // ppbl2024 token
             .txInCollateral(
               collateralUTxO.input.txHash,
               collateralUTxO.input.outputIndex,
@@ -226,11 +256,14 @@ export default function PPBLFaucetWithdrawalTx() {
               "addr_test1wpj47k0wgxqy5qtf9kcvge6xq4y4ua7lvz9dgnc7uuy5ugcz5dr76",
               outputFaucetAssets,
             ) // faucet validator
-            .txOutInlineDatumValue(outgoingDatum, "JSON");
+            .txOutInlineDatumValue(outgoingDatum, "JSON")
+            .changeAddress(address)
+            .complete(); // builds the transaction and uses Maestro evaluator
 
-          console.log("Your Tx: ", tx);
-          const unsignedTx = await tx.build();
+          console.log("Your Tx CBOR: ", unsignedTx);
+          // Sign tx
           const signedTx = await wallet.signTx(unsignedTx, true);
+          // Submit tx
           const txHash = await wallet.submitTx(signedTx);
           console.log(txHash);
           alert(
