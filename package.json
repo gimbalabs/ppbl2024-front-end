@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@maestro-org/typescript-sdk": "^1.6.1",
     "@meshsdk/common": "^1.7.5",
     "@meshsdk/contract": "^1.7.5",
     "@meshsdk/core": "^1.7.5",

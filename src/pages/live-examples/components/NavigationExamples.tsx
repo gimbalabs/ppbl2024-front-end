@@ -18,9 +18,13 @@ export default function NavigationExamples() {
       courseModule: 203,
       title: "Minting NFTs in an Application",
     },
+    {
+      courseModule: 204,
+      title: "Introduction to Blockchain Queries",
+    },
   ];
   return (
-    <div className="mx-auto grid w-full grid-cols-1 gap-5 md:w-2/3 md:grid-cols-2 mt-24 pt-12 mb-[250px] border-t border-white">
+    <div className="mx-auto mb-[250px] mt-24 grid w-full grid-cols-1 gap-5 border-t border-white pt-12 md:w-2/3 md:grid-cols-2">
       {examples.map((example, i) => (
         <div
           key={i}
@@ -29,7 +33,15 @@ export default function NavigationExamples() {
           <p className="text-xl font-bold">{example.title}</p>
           <p>Live Example for Module {example.courseModule}</p>
           <p className="pt-5 text-amber-500 hover:text-amber-300">
-            <Link href={example.courseModule == 100 ? "/live-examples" : `/live-examples/${example.courseModule}`}>View Example</Link>
+            <Link
+              href={
+                example.courseModule == 100
+                  ? "/live-examples"
+                  : `/live-examples/${example.courseModule}`
+              }
+            >
+              View Example
+            </Link>
           </p>
         </div>
       ))}
