@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import { Button } from "~/components/ui/button";
 
 const blockfrost = axios.create({
-  headers: { Project_id: "preprodFNqHCwDnqTptmZWi9W7pZ7CF83NSqgOf" },
+  headers: {
+    Project_id: process.env.NEXT_PUBLIC_BLOCKFROST_PREPROD_PROJECT_ID,
+  },
 });
 
 type AssetType = {
@@ -43,7 +45,7 @@ export default function QueryByPolicyId() {
   return (
     <div>
       <h2>Here is an example of querying by policy id</h2>
-      <Button onClick={() => setToggleFetchData(true)}>
+      <Button className="my-3" onClick={() => setToggleFetchData(true)}>
         Fetch a list of all PPBL 2024 Token names
       </Button>
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}

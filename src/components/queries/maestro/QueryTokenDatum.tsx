@@ -7,9 +7,10 @@ import {
 } from "@maestro-org/typescript-sdk";
 import { hexToString } from "@meshsdk/common";
 
+// Your .env file in Lessons 2024.1 and 204.2
 const maestro = new MaestroClient(
   new Configuration({
-    apiKey: "292hClTTejbQtFZmxUk5y4LoWjxirYWl",
+    apiKey: process.env.NEXT_PUBLIC_MAESTRO_PREPROD_KEY,
     network: "Preprod",
   }),
 );
@@ -44,7 +45,7 @@ export default function QueryTokenDatum() {
         You could use Blockfrost for this query as well. Note also that we might
         be learning a bit more about the PPBL 2024 token now!
       </p>
-      <Button onClick={() => setToggleFetchData(true)}>
+      <Button className="my-3" onClick={() => setToggleFetchData(true)}>
         Investigate PPBL 2024 Token datum
       </Button>
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
