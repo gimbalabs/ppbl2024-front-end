@@ -1,6 +1,7 @@
+import MeshQueryByPolicyId from "~/components/queries/blockfrost/MeshQueryByPolicyId";
 import QueryByPolicyId from "~/components/queries/blockfrost/QueryByPolicyId";
+import MeshQueryTokenDatum from "~/components/queries/maestro/MeshQueryTokenDatum";
 import QueryTokenDatum from "~/components/queries/maestro/QueryTokenDatum";
-import GalleryComponent from "~/components/transactions/Module203/GalleryComponent";
 import {
   Card,
   CardContent,
@@ -30,15 +31,15 @@ export default function Module204Component() {
           <CardFooter></CardFooter>
         </Card>
         <Card>
-          <CardHeader>
-            SLT 204.3: Using Mesh Providers - view all docs
-          </CardHeader>
+          <CardHeader>SLT 204.3: Using Mesh Providers</CardHeader>
           <CardContent className="w-full">
-            <GalleryComponent />
+            <MeshQueryByPolicyId />
+            <div className="my-5 border border-white" />
+            <MeshQueryTokenDatum />
           </CardContent>
           <CardFooter>
             These are just examples to get you started. To learn more about
-            Mesh, view Mesh PBL course. (Note 204.4 leads to Go PBL as well)
+            Mesh, view Mesh PBL course.
           </CardFooter>
         </Card>
       </>
