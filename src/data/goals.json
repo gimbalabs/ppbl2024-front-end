@@ -8,7 +8,13 @@
         },
         {
             "date": "2024-12-27",
+            "name": "taiiii",
             "goal": "Make token",
+            "organization": "optional"
+        },
+              {
+            "date": "2024-12-27",
+            "goal": "mo",
             "name": "optional",
             "organization": "optional"
         },
