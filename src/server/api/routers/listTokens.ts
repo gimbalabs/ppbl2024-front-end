@@ -5,10 +5,18 @@ import { type Asset } from "@meshsdk/common";
 
 import { hexToString } from "~/utils/text";
 
+import { getEnv } from "./ppbl2024TokenMintTx";
+
+
+export const getMaestroApiKey = (): string => {
+  return getEnv("MAESTRO_PREPROD_KEY");
+};
+
+const apiKey = getMaestroApiKey();
 
 const maestroProvider = new MaestroProvider({
     network: "Preprod",
-    apiKey: "jw0WPcP7Tx5n9C0P0gKKUUT4gX4TfVgG", // Get yours by visiting https://docs.gomaestro.org/docs/Getting-started/Sign-up-login.
+    apiKey: apiKey, // Get yours by visiting https://docs.gomaestro.org/docs/Getting-started/Sign-up-login.
     turboSubmit: false, // Read about paid turbo transaction submission feature at https://docs.gomaestro.org/docs/Dapp%20Platform/Turbo%20Transaction.
   });
 
