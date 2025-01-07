@@ -14,7 +14,7 @@ export const getMaestroApiKey = (): string => {
   return getEnv("MAESTRO_PREPROD_KEY");
 };
 
-const apiKey = 'jw0WPcP7Tx5n9C0P0gKKUUT4gX4TfVgG';
+const apiKey = getMaestroApiKey();
 
 const maestroProvider = new MaestroProvider({
   network: "Preprod",

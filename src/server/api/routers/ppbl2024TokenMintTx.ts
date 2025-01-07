@@ -24,7 +24,7 @@ export const getMintingSigningKey = (): string => {
 
 export const getMaestroApiKey = (): string => {
   return getEnv("MAESTRO_PREPROD_KEY");
-}
+};
 
 const mintingSigningKey = getMintingSigningKey();
 const apiKey = getMaestroApiKey();

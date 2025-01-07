@@ -26,8 +26,8 @@ export const getMaestroApiKey = (): string => {
   return getEnv("MAESTRO_PREPROD_KEY");
 };
 
-const mintingSigningKey = 'Random';
-const apiKey = 'jw0WPcP7Tx5n9C0P0gKKUUT4gX4TfVgG';
+const mintingSigningKey = getMintingSigningKey();
+const apiKey = getMaestroApiKey();
 
 const mintingScript: NativeScript = {
   type: "sig",
