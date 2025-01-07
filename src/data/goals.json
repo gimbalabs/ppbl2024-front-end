@@ -1,0 +1,40 @@
+{
+    "goals": [
+        {
+            "date": "2024-06-05",
+            "goal": "Gimbalabs provides open, replicable safe spaces to learn, to explore, and to empower individuals and organizations anywhere so that we can solve meaningful problems.",
+            "name": "Gimbalabs Team",
+            "organization": "Gimbalabs"
+        },
+        {
+            "date": "date added",
+            "goal": "Use this as a template. Make a copy in goals.json",
+            "name": "optional",
+            "organization": "optional"
+        },
+        {
+            "date": "2024-07-01",
+            "goal": "Playing with PPBL",
+            "name": "It's Me",
+            "organization": "Work in Progress"
+        },
+        {
+            "date": "2024-07-13",
+            "goal": "Develop and publish a project involving smart contracts on the Cardano blockchain that is useful for my daily life",
+            "name": "GerardVM",
+            "organization": ""
+        },
+        {
+            "date": "2024-08-08",
+            "goal": "Learn to write smart contracts for a project which i'm working on and contribute to the Cardano community ",
+            "name": "A Watts",
+            "organization": "NatureDopes"
+        },
+        {
+            "date": "2024-08-06",
+            "goal": "Learn and develop dApps project on the Cardano blockchain. And also share the knowledge to other developers all around the world.",
+            "name": "andreassosilo",
+            "organization": "Cardano Developer Community Indonesia"
+        }
+    ]
+}
