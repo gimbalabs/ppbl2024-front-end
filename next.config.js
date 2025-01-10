@@ -7,7 +7,7 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
 
-  serverExternalPackages: ["@meshsdk/core", "@meshsdk/core-cst", "@meshsdk/react"],  
+
   reactStrictMode: true,
   webpack: function (config, {isServer}) {
     config.experiments = {
