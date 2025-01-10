@@ -114,7 +114,9 @@ export default function Navigation() {
               >
                 Text and video content
               </ListItem>
-              <ListItem href="/live-examples" title="Project-Based Learning">
+                <ListItem
+                  href="/live-examples"
+                  title="Project-Based Learning">
                 Get hands on experience as a Cardano developer
               </ListItem>
               <ListItem href="https://gimbalabs.com" title="From Gimbalabs">
