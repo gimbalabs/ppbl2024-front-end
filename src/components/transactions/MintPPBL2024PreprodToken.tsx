@@ -43,10 +43,11 @@ export default function MintPPBL2024PreprodToken() {
 
   const [tokenNameExists, setTokenNameExists] = useState<boolean>(false);
 
-  const { data: forgingScript } =
-    api.ppbl2024TokenMintTx.forgingScript.useQuery();
-  const { data: tokenNames } =
-    api.ppbl2024TokenMintTx.listTokenNames.useQuery();
+  const { data: listTokenNames } =
+    api.listTokens.listTokenNames.useQuery();
+
+ const { data: forgingScript } =
+   api.ppbl2024TokenMintTx.forgingScript.useQuery();
 
   const formSchema = z.object({
     tokenAlias: z.string().min(2, {
@@ -74,7 +75,7 @@ export default function MintPPBL2024PreprodToken() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (tokenNames?.includes(values.tokenAlias)) {
+    if (listTokenNames?.includes(values.tokenAlias)) {
       alert(
         `The token alias ${values.tokenAlias} is already minted. Please try a different one.`,
       );
@@ -191,8 +192,8 @@ export default function MintPPBL2024PreprodToken() {
                   </FormItem>
                 )}
               />
-              {!!tokenNames &&
-                tokenNames.includes(form.getValues().tokenAlias) && (
+              {!!listTokenNames &&
+                listTokenNames.includes(form.getValues().tokenAlias) && (
                   <div className="bg-orange-700 p-3">
                     This tokenAlias is already minted. Please choose a different
                     alias.
@@ -210,7 +211,7 @@ export default function MintPPBL2024PreprodToken() {
           </AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {tokenNames?.map((t, i) => (
+              {listTokenNames?.map((t, i) => (
                 <div key={i} className="flex w-full justify-center items-center bg-accent p-2 text-accent-foreground">
                   {t}
                 </div>

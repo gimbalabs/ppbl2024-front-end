@@ -57,22 +57,6 @@ export const ppbl2024TokenMintTxRouter = createTRPCRouter({
     return forgingScript;
   }),
 
-  listTokenNames: publicProcedure.query(async () => {
-    const _tns: { assets: Asset[]; next: string | number | null } =
-      await maestroProvider.fetchCollectionAssets(
-        "903c419ee7ebb6bf4687c61fb133d233ef9db2f80e4d734db3fbaf0b",
-      );
-    const _222s = _tns.assets.filter((a) =>
-      a.unit.startsWith(
-        "903c419ee7ebb6bf4687c61fb133d233ef9db2f80e4d734db3fbaf0b" + "323232",
-      ),
-    );
-    const _names: string[] = [];
-    _222s.forEach((n) => {
-      _names.push(hexToString(n.unit.substring(80)));
-    });
-    return _names;
-  }),
 
   signAndSubmitTx: publicProcedure
     .input(z.object({ unsignedTx: z.string().min(3) }))

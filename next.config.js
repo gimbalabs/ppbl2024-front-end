@@ -6,12 +6,17 @@ await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
 const config = {
+
+
   reactStrictMode: true,
-  webpack: function (config, options) {
+  webpack: function (config, {isServer}) {
     config.experiments = {
       asyncWebAssembly: true,
       layers: true,
     };
+    if (!isServer) {
+      config.output.environment = { ...config.output.environment, asyncFunction: true };
+    }
     return config;
   },
 
