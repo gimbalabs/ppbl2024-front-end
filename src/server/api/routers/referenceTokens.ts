@@ -69,7 +69,7 @@ export const referenceTokensRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       try {
         console.log("check101", input);
-        const appSignedTx = policyWallet.signTx(input.unsignedTx, true);
+        const appSignedTx = await policyWallet.signTx(input.unsignedTx, true);
         console.log("check102", appSignedTx);
         const txHash = await policyWallet.submitTx(appSignedTx);
         console.log("Transaction successfully submitted!", txHash);
