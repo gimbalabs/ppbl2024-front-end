@@ -13,7 +13,7 @@ export default function GetStartedConnectWalletComponent() {
     <Card>
       <CardHeader>To get started, connect a wallet.</CardHeader>
       <CardContent>
-        <CardanoWallet />
+        <CardanoWallet isDark={true} />
       </CardContent>
       <CardFooter>
         {network === 0 && (
