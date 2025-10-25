@@ -67,7 +67,20 @@
             "goal": "Practice lifelong learing, hone computational thinking skills, connect, share and innovate. Build better future.",
             "name": "Alex/fifty",
             "organization": "Intersect MBO"
-         }
-         
+         },
+
+		{
+			 "date": "2025-10-24",
+			 "goal": "To finally, finally, FINALLY, dominate smart contract creation on Cardano. Hopefully with Andamio's help.",
+			 "name": "Sapiens Immortal",
+			 "organization": "Odin"
+		 },
+		  
+		{
+			  "date": "2025-10-24",
+			  "goal": "Here is my second post, because practice makes permanent",
+			  "name": "Sapiens Immortal",
+			  "organization": "Odin"
+		 }
     ]
 }
